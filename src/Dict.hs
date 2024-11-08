@@ -2,7 +2,7 @@ module Dict
   ( Dict (..),
     createDict,
     Dict.insert,
-    Dict.delete,
+    Dict.remove,
     Dict.find,
     Dict.mapDict,
     Dict.foldlDict,
@@ -14,7 +14,6 @@ where
 import RBTree
   ( Color (..),
     RBDictionary (..),
-    delete',
     filter',
     foldl'',
     foldr'',
@@ -22,6 +21,7 @@ import RBTree
     insert',
     lookup',
     map',
+    remove',
   )
 
 newtype Dict a b = Dict (RBDictionary a b)
@@ -44,8 +44,8 @@ createDict = Dict Leaf
 insert :: (Ord a) => a -> b -> Dict a b -> Dict a b
 insert k vl (Dict dict) = Dict (insert' k vl dict)
 
-delete :: (Ord a) => a -> Dict a b -> Dict a b
-delete k (Dict dict) = Dict (delete' k dict)
+remove :: (Ord a) => a -> Dict a b -> Dict a b
+remove k (Dict dict) = Dict (remove' k dict)
 
 find :: (Ord a) => a -> Dict a b -> Maybe b
 find k (Dict dict) = lookup' k dict

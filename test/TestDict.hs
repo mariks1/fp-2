@@ -3,13 +3,13 @@ module TestDict (tests) where
 import Dict
   ( Dict (..),
     createDict,
-    delete,
     filterDict,
     find,
     foldlDict,
     foldrDict,
     insert,
     mapDict,
+    remove,
   )
 import Test.Tasty
 import Test.Tasty.HUnit
@@ -21,8 +21,8 @@ tests =
     [ testCase "Create dictionary" testCreate,
       testCase "Insert 1 elem in dictionary" testInsert,
       testCase "Multiple insertation" testInsertMultiple,
-      testCase "Delete the only 1 elem" testDeleteOnlyElem,
-      testCase "Delete elem" testDelete,
+      testCase "Remove the only 1 elem" testRemoveOnlyElem,
+      testCase "Remove elem" testRemove,
       testCase "Map with increment" testMapInc,
       testCase "Map with reverse Strings" testMapStrings,
       testCase "Foldl with plus" testFoldlPlus,
@@ -52,17 +52,17 @@ testInsertMultiple = do
   find 4 dict' @?= Just "four"
   find 5 dict' @?= Just "five"
 
-testDeleteOnlyElem :: Assertion
-testDeleteOnlyElem = do
+testRemoveOnlyElem :: Assertion
+testRemoveOnlyElem = do
   let dict = insert 1 10 (createDict :: Dict Int Int)
-  let dict' = delete 1 dict
+  let dict' = remove 1 dict
   find 1 dict' @?= Nothing
   dict' @?= createDict
 
-testDelete :: Assertion
-testDelete = do
+testRemove :: Assertion
+testRemove = do
   let dict = insert 2 20 (insert 3 30 (insert 4 40 (insert 1 10 (createDict :: Dict Int Int))))
-  let dict' = delete 3 dict
+  let dict' = remove 3 dict
   find 3 dict' @?= Nothing
   find 2 dict' @?= Just 20
   find 4 dict' @?= Just 40

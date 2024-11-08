@@ -4,7 +4,7 @@ module RBTree
   ( RBDictionary (..),
     Color (..),
     insert',
-    delete',
+    remove',
     map',
     foldl'',
     foldr'',
@@ -88,8 +88,8 @@ makeBlack :: RBDictionary a b -> RBDictionary a b
 makeBlack (Node k v _ left right) = Node k v Black left right
 makeBlack Leaf = Leaf
 
-delete' :: (Ord a) => a -> RBDictionary a b -> RBDictionary a b
-delete' k dict = makeBlack $ del k dict
+remove' :: (Ord a) => a -> RBDictionary a b -> RBDictionary a b
+remove' k dict = makeBlack $ del k dict
 
 del :: (Ord a) => a -> RBDictionary a b -> RBDictionary a b
 del _ Leaf = Leaf
@@ -152,24 +152,3 @@ foldr'' f acc (Node {key = k, value = vl, leftChild = left, rightChild = right})
 
 filter' :: (Ord a) => (b -> Bool) -> RBDictionary a b -> RBDictionary a b
 filter' p = foldr'' (\(k, vl) d -> if p vl then insert' k vl d else d) (fromList' [])
-
--- Пример дерева для тестирования
-exampleTree :: RBDictionary Int Int
-exampleTree =
-  Node
-    2
-    20
-    Black
-    (Node 1 10 Red Leaf Leaf)
-    (Node 3 30 Red Leaf Leaf)
-
-main :: IO ()
-main = do
-  print exampleTree
-  -- Используем foldl''
-  let leftFold = foldl'' (\(k, _) acc -> acc ++ show k) "" exampleTree
-  print leftFold -- Ожидается: "123" (порядок: 1 -> 2 -> 3)
-
-  -- Используем foldr''
-  let rightFold = foldr'' (\(k, _) acc -> acc ++ show k) "" exampleTree
-  print rightFold -- Ожидается: "321" (порядок: 3 -> 2 -> 1)
